@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Properties</title>
+    <title>View Tenants</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -15,7 +15,7 @@
 <body>
     <div class="container-fluid px-4">
         <header class="bg-primary text-white py-4 mb-4">
-            <h1 class="text-center">View Properties</h1>
+            <h1 class="text-center">View Tenants</h1>
             <nav>
                 <ul>
                     <li><a href="index.html">Back to Home</a></li>
@@ -24,27 +24,41 @@
         </header>
         <div class="card shadow">
             <div class="card-body">
-                <h2>Properties</h2>
-                <div class="modal fade" id="editPropertyModal" tabindex="-1" aria-labelledby="editPropertyModalLabel" aria-hidden="true">
+                <h2>Tenants</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tenant Name</th>
+                            <th>Property Name</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tenantsList">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal fade" id="editTenantModal" tabindex="-1" aria-labelledby="editTenantModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editPropertyModalLabel">Edit Property</h5>
+                <h5 class="modal-title" id="editTenantModalLabel">Edit Tenant</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editPropertyForm">
+                <form id="editTenantForm">
+                    <div class="mb-3">
+                        <label for="editTenantName" class="form-label">Tenant Name</label>
+                        <input type="text" class="form-control" id="editTenantName" required>
+                    </div>
                     <div class="mb-3">
                         <label for="editPropertyName" class="form-label">Property Name</label>
                         <input type="text" class="form-control" id="editPropertyName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editAddress" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="editAddress" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editRent" class="form-label">Rent</label>
-                        <input type="number" class="form-control" id="editRent" required>
+                        <label for="editPhone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="editPhone" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
@@ -52,22 +66,6 @@
         </div>
     </div>
 </div>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Property Name</th>
-            <th>Address</th>
-            <th>Rent</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="propertiesList">
-        
-    </tbody>
-</table>
-            </div>
-        </div>
     </div>
 </body>
 </html>
