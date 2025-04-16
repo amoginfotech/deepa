@@ -72,7 +72,7 @@ async function saveProperty(property) {
 // Function to display properties
 function displayProperties(properties) {
     const propertiesList = document.getElementById('propertiesList');
-    propertiesList.innerHTML = '<tr><th>Property Name</th><th>Type</th><th>Specification</th><th>Size</th><th>Address</th><th>Description</th><th>Bescom#</th><th>Property#</th><th>BWWSSB#</th><th>Acquired Mode</th><th>Acquisition Date</th><th>Last Updated Date</th><th>Actions</th></tr>';
+    propertiesList.innerHTML = '<tr><th onclick="toggleSort(\'property_name\')">Property Name ▲▼</th><th>Type</th><th>Specification</th><th>Size</th><th onclick="toggleSort(\'address\')">Address ▲▼</th><th>Description</th><th>Bescom#</th><th>Property#</th><th>BWWSSB#</th><th>Acquired Mode</th><th>Acquisition Date</th><th>Last Updated Date</th><th>Actions</th></tr>';
 
     properties.forEach((property) => {
         const row = document.createElement('tr');
@@ -124,6 +124,26 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
     }
 });
+
+let sortDirection = { property_name: 1, address: 1 };
+
+function sortProperties(properties, field) {
+    return properties.sort((a, b) => {
+        if (a[field] < b[field]) return -1 * sortDirection[field];
+        if (a[field] > b[field]) return 1 * sortDirection[field];
+        return 0;
+    });
+}
+
+window.toggleSort = function(field) {
+    sortDirection[field] = sortDirection[field] === 1 ? -1 : 1;
+    const sorted = sortProperties(properties, field);
+    displayProperties(sorted);
+    const header = document.querySelector(`th[data-field="${field}"]`);
+    if (header) {
+        header.innerHTML = `${field} <i class="bi bi-arrow-${sortDirection[field] === 1 ? 'up' : 'down'}"></i>`;
+    }
+}
 
 window.handleSearch = function(searchTerm) {
     //console.log('you are searching for:', searchTerm);

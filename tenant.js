@@ -97,7 +97,7 @@ function displayTenants(tenantsToDisplay) {
         console.error('Tenants list element not found');
         return;
     }
-    tenantsList.innerHTML = '';
+    tenantsList.innerHTML = '<tr><th onclick="toggleSort(\'tenantName\')">Tenant Name ▲▼</th><th onclick="toggleSort(\'propertyName\')">Property Name ▲▼</th><th>Adhar</th><th>Phone</th><th>Start Date</th><th>End Date</th><th>Advance</th><th>Rent</th><th>Revise Date</th><th>Adv Pay Date</th><th>Adv Pay Mode</th><th>Last Update Date</th><th>Status</th><th>Actions</th></tr>';
 
     if (!tenantsToDisplay || !Array.isArray(tenantsToDisplay)) {
         console.error('Invalid tenants data:', tenantsToDisplay);
@@ -155,6 +155,26 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
     }
 });
+
+let sortDirection = { tenantName: 1, propertyName: 1 };
+
+function sortTenants(tenants, field) {
+    return tenants.sort((a, b) => {
+        if (a[field] < b[field]) return -1 * sortDirection[field];
+        if (a[field] > b[field]) return 1 * sortDirection[field];
+        return 0;
+    });
+}
+
+window.toggleSort = function(field) {
+    sortDirection[field] = sortDirection[field] === 1 ? -1 : 1;
+    const sorted = sortTenants(tenants, field);
+    displayTenants(sorted);
+    const header = document.querySelector(`th[data-field="${field}"]`);
+    if (header) {
+        header.innerHTML = `${field} <i class="bi bi-arrow-${sortDirection[field] === 1 ? 'up' : 'down'}"></i>`;
+    }
+}
 
 window.handleSearch = function(searchTerm) {
     if (!searchTerm) {
