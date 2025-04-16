@@ -56,7 +56,13 @@ function populatePropertyDropdowns() {
     const addDropdown = document.getElementById('propertyName');
     const editDropdown = document.getElementById('editPropertyName');
     
-    const options = properties.map(property => 
+    const sortedProperties = properties.sort((a, b) => {
+        if (a.property_name < b.property_name) return -1;
+        if (a.property_name > b.property_name) return 1;
+        return 0;
+    });
+    
+    const options = sortedProperties.map(property => 
         `<option value="${property.property_name}">${property.property_name}</option>`
     ).join('');
     
