@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Rent</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="rent.js" defer></script>
+</head>
+<body>
+    <div class="container-fluid px-4">
+        <header class="bg-primary text-white py-4 mb-4">
+            <h1 class="text-center">View Rent</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Back to Home</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="card shadow">
+            <div class="card-body">
+                <h2>Rent Details</h2>
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search by property or tenant name..." oninput="handleSearch(this.value)">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addRentModal">Add Rent</button>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                   
+                    <tbody id="rentsList">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Rent Modal -->
+    <div class="modal fade" id="editRentModal" tabindex="-1" aria-labelledby="editRentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRentModalLabel">Edit Rent</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editRentForm" onsubmit="event.preventDefault(); updateRent(this.dataset.rentId, {
+                        propertyName: this.editPropertyName.value,
+                        tenantName: this.editTenantName.value,
+                        rentMonth: this.editRentMonth.value,
+                        utilityBills: this.editUtilityBills.value,
+                        rentAmount: this.editRentAmount.value
+                    });">
+                        <div class="mb-3">
+                            <label for="editPropertyName" class="form-label">Property Name</label>
+                            <input type="text" class="form-control" id="editPropertyName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editTenantName" class="form-label">Tenant Name</label>
+                            <input type="text" class="form-control" id="editTenantName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRentMonth" class="form-label">Rent Month</label>
+                            <input type="month" class="form-control" id="editRentMonth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUtilityBills" class="form-label">Utility Bills</label>
+                            <input type="number" class="form-control" id="editUtilityBills" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRentAmount" class="form-label">Rent Amount</label>
+                            <input type="number" class="form-control" id="editRentAmount" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Rent Modal -->
+    <div class="modal fade" id="addRentModal" tabindex="-1" aria-labelledby="addRentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRentModalLabel">Add New Rent</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRentForm">
+                        <div class="mb-3">
+                            <label for="propertyName" class="form-label">Property Name</label>
+                            <input type="text" class="form-control" id="propertyName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tenantName" class="form-label">Tenant Name</label>
+                            <input type="text" class="form-control" id="tenantName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rentMonth" class="form-label">Rent Month</label>
+                            <input type="month" class="form-control" id="rentMonth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="utilityBills" class="form-label">Utility Bills</label>
+                            <input type="number" class="form-control" id="utilityBills" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rentAmount" class="form-label">Rent Amount</label>
+                            <input type="number" class="form-control" id="rentAmount" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Rent</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
