@@ -47,8 +47,8 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Property Name</th>
-                            <th>Tenant Name</th>
+                            <th onclick="toggleSort('property_name')">Property Name ▲▼</th>
+                            <th onclick="toggleSort('tenantName')">Tenant Name ▲▼</th>
                             <th>Ledger Description</th>
                             <th>Debit</th>
                             <th>Credit</th>
@@ -80,7 +80,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editTenantName" class="form-label">Tenant Name</label>
-                            <select class="form-select" id="editTenantName" required></select>
+                            <input type="text" class="form-control" id="editTenantName" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="editLedgerDesc" class="form-label">Ledger Description</label>
@@ -121,7 +121,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="tenantName" class="form-label">Tenant Name</label>
-                            <select class="form-select" id="tenantName" required></select>
+                            <input type="text" class="form-control" id="tenantName" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="ledgerDesc" class="form-label">Ledger Description</label>

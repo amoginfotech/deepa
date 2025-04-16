@@ -60,9 +60,27 @@ function populatePropertyDropdowns() {
     propertySelects.forEach(selectId => {
         const select = document.getElementById(selectId);
         if (select) {
+            const sortedProperties = properties.sort((a, b) => {
+                if (a.property_name < b.property_name) return -1;
+                if (a.property_name > b.property_name) return 1;
+                return 0;
+            });
             select.innerHTML = '<option value="">Select Property</option>';
-            properties.forEach(property => {
+            sortedProperties.forEach(property => {
                 select.innerHTML += `<option value="${property.property_name}">${property.property_name}</option>`;
+            });
+            
+            // Add event listener for property selection
+            select.addEventListener('change', async (e) => {
+                const selectedProperty = e.target.value;
+                if (selectedProperty) {
+                    // Find tenants associated with the selected property
+                    const propertyTenants = tenants.filter(tenant => tenant.propertyName === selectedProperty);
+                    const tenantInput = document.getElementById('tenantName');
+                    if (tenantInput) {
+                        tenantInput.value = propertyTenants.length > 0 ? propertyTenants[0].tenantName : '';
+                    }
+                }
             });
         }
     });
@@ -74,8 +92,13 @@ function populateTenantDropdowns() {
     tenantSelects.forEach(selectId => {
         const select = document.getElementById(selectId);
         if (select) {
+            const sortedTenants = tenants.sort((a, b) => {
+                if (a.tenantName < b.tenantName) return -1;
+                if (a.tenantName > b.tenantName) return 1;
+                return 0;
+            });
             select.innerHTML = '<option value="">Select Tenant</option>';
-            tenants.forEach(tenant => {
+            sortedTenants.forEach(tenant => {
                 select.innerHTML += `<option value="${tenant.tenantName}">${tenant.tenantName}</option>`;
             });
         }
@@ -111,6 +134,22 @@ async function saveRent(rent) {
 }
 
 // Function to display rents
+let sortDirection = { property_name: 1, tenantName: 1 };
+
+function sortRents(rents, field) {
+    return rents.sort((a, b) => {
+        if (a[field] < b[field]) return -1 * sortDirection[field];
+        if (a[field] > b[field]) return 1 * sortDirection[field];
+        return 0;
+    });
+}
+
+window.toggleSort = function(field) {
+    sortDirection[field] = sortDirection[field] === 1 ? -1 : 1;
+    const sorted = sortRents(rents, field);
+    displayRents(sorted);
+}
+
 function displayRents(rentsToDisplay = rents) {
     const rentsList = document.getElementById('rentsList');
     rentsList.innerHTML = '';
@@ -203,12 +242,35 @@ window.openEditRentModal = function(id) {
     document.getElementById('editPymtDate').value = rent.pymt_date || '';
     document.getElementById('editRentForm').dataset.rentId = id;
     new bootstrap.Modal(document.getElementById('editRentModal')).show();
-    document.getElementById('editDebit').value = rent.debit || 0;
-    document.getElementById('editCredit').value = rent.credit || 0;
-    document.getElementById('editPymtDate').value = rent.pymt_date || '';
-    document.getElementById('editBalance').value = rent.balance || 0;
-    document.getElementById('editRentForm').dataset.rentId = id;
-    new bootstrap.Modal(document.getElementById('editRentModal')).show();
+
+    // Add event listener for property dropdown change
+    const propertySelect = document.getElementById('editPropertyName');
+    if (propertySelect) {
+        propertySelect.addEventListener('change', (e) => {
+            const selectedProperty = e.target.value;
+            if (selectedProperty) {
+                // Find tenants associated with the selected property
+                const propertyTenants = tenants.filter(tenant => tenant.propertyName === selectedProperty);
+                const tenantInput = document.getElementById('editTenantName');
+                if (tenantInput) {
+                    tenantInput.value = propertyTenants.length > 0 ? propertyTenants[0].tenantName : '';
+                }
+            }
+        });
+    }
+
+    if (rent) {
+        document.getElementById('editPropertyName').value = rent.propertyName || '';
+        document.getElementById('editTenantName').value = rent.tenantName || '';
+        document.getElementById('editLedgerDesc').value = rent.ledger_desc || '';
+        document.getElementById('editDebit').value = rent.debit || 0;
+        document.getElementById('editCredit').value = rent.credit || 0;
+        document.getElementById('editPymtDate').value = rent.pymt_date || '';
+        document.getElementById('editRentForm').dataset.rentId = id;
+        new bootstrap.Modal(document.getElementById('editRentModal')).show();
+    } else {
+        console.error('Rent data not found for id:', id);
+    }
 }
 
 // Function to update rent

@@ -3,7 +3,7 @@ const auth = firebase.auth();
 
 // Session timeout variables
 let timeoutTimer;
-const SESSION_TIMEOUT = 60000; // 60 seconds
+const SESSION_TIMEOUT = 300000; // 3 minutes
 
 // Reset timer on user activity
 function resetTimer() {
