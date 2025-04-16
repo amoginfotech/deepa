@@ -12,8 +12,9 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js" defer></script>
-    <script src="login.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="login.js"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -25,10 +26,10 @@
             <h1 class="text-center">Rental Management App</h1>
             <nav>
                 <ul>
-
                     <li><a href="view-rent.html"">Rent Payment</a></li>
                     <li><a href="view-tenant.html">Tenant</a></li>
                     <li><a href="view-property.html">Property</a></li>
+                    <li><a href="#" id="logoutButton" onclick="handleLogout()">Logout</a></li>
                 </ul>
             </nav>
         </header>
@@ -50,4 +51,19 @@ firebase.auth().onAuthStateChanged((user) => {
         window.location.href = 'index.html';
     }
 });
+
+// Handle logout functionality
+function handleLogout() {
+    // Clear all cookies
+    document.cookie.split(';').forEach(c => {
+        document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+    });
+    
+    // Sign out from Firebase
+    firebase.auth().signOut().then(() => {
+        window.location.href = 'index.html';
+    }).catch((error) => {
+        console.error('Error signing out:', error);
+    });
+}
 </script>
