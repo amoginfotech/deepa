@@ -5,9 +5,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('addPropertyForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const property = {
-            name: document.getElementById('propertyName').value,
+            property_name: document.getElementById('propertyName').value,
+            type: document.getElementById('type').value,
+            specification: document.getElementById('specification').value,
+            size: document.getElementById('size').value,
             address: document.getElementById('address').value,
-            monthlyRent: parseFloat(document.getElementById('monthlyRent').value)
+            desc: document.getElementById('desc').value,
+            bescom_no: document.getElementById('bescom_no').value,
+            property_no: document.getElementById('property_no').value,
+            bwwssb_no: document.getElementById('bwwssb_no').value,
+            aquired_mode: document.getElementById('aquired_mode').value,
+            aq_date: document.getElementById('aq_date').value,
+            last_upd_dt: new Date().toISOString().split('T')[0]
         };
         await saveProperty(property);
         new bootstrap.Modal(document.getElementById('addPropertyModal')).hide();
@@ -63,18 +72,23 @@ async function saveProperty(property) {
 // Function to display properties
 function displayProperties(properties) {
     const propertiesList = document.getElementById('propertiesList');
-    propertiesList.innerHTML = '<tr><th>Name</th><th>Address</th><th>Type</th><th>Size</th><th>Monthly Rent</th><th>Deposit</th><th>Lease Terms</th><th>Actions</th></tr>';
+    propertiesList.innerHTML = '<tr><th>Property Name</th><th>Type</th><th>Specification</th><th>Size</th><th>Address</th><th>Description</th><th>Bescom#</th><th>Property#</th><th>BWWSSB#</th><th>Acquired Mode</th><th>Acquisition Date</th><th>Last Updated Date</th><th>Actions</th></tr>';
 
     properties.forEach((property) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${property.name}</td>
-            <td>${property.address}</td>
-            <td>${property.type}</td>
-            <td>${property.size} sq ft</td>
-            <td>$${property.monthlyRent}</td>
-            <td>$${property.deposit}</td>
-            <td>${property.leaseTerms} months</td>
+            <td>${property.property_name || ''}</td>
+            <td>${property.type || ''}</td>
+            <td>${property.specification || ''}</td>
+            <td>${property.size || ''}</td>
+            <td>${property.address || ''}</td>
+            <td>${property.desc || ''}</td>
+            <td>${property.bescom_no || ''}</td>
+            <td>${property.property_no || ''}</td>
+            <td>${property.bwwssb_no || ''}</td>
+            <td>${property.aquired_mode || ''}</td>
+            <td>${property.aq_date || ''}</td>
+            <td>${property.last_upd_dt || ''}</td>
             <td>
                 <button class="btn btn-primary btn-sm" onclick="openEditPropertyModal('${property.id}')">Edit</button>
                 <button class="btn btn-danger btn-sm" onclick="deleteProperty('${property.id}')">Delete</button>
@@ -87,9 +101,17 @@ function displayProperties(properties) {
 // Function to open edit property modal
 window.openEditPropertyModal = function(id) {
     const property = properties.find(p => p.id === id);
-    document.getElementById('editPropertyName').value = property.name;
-    document.getElementById('editAddress').value = property.address;
-    document.getElementById('editRent').value = property.monthlyRent;
+    document.getElementById('editPropertyName').value = property.property_name || '';
+    document.getElementById('editType').value = property.type || '';
+    document.getElementById('editSpecification').value = property.specification || '';
+    document.getElementById('editSize').value = property.size || '';
+    document.getElementById('editAddress').value = property.address || '';
+    document.getElementById('editDesc').value = property.desc || '';
+    document.getElementById('editBescomNo').value = property.bescom_no || '';
+    document.getElementById('editPropertyNo').value = property.property_no || '';
+    document.getElementById('editBwwssbNo').value = property.bwwssb_no || '';
+    document.getElementById('editAquiredMode').value = property.aquired_mode || '';
+    document.getElementById('editAqDate').value = property.aq_date || '';
     document.getElementById('editPropertyForm').dataset.propertyId = id;
     new bootstrap.Modal(document.getElementById('editPropertyModal')).show();
 }
@@ -111,7 +133,7 @@ window.handleSearch = function(searchTerm) {
     }
     const searchLower = searchTerm.toLowerCase();
     const filtered = properties.filter(p => {
-        const name = p.name ? p.name.toLowerCase() : '';
+        const name = p.property_name ? p.property_name.toLowerCase() : '';
         const address = p.address ? p.address.toLowerCase() : '';
         return name.includes(searchLower) || address.includes(searchLower);
     });
@@ -135,9 +157,18 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const id = this.dataset.propertyId;
         const updatedData = {
-            name: document.getElementById('editPropertyName').value,
+            property_name: document.getElementById('editPropertyName').value,
+            type: document.getElementById('editType').value,
+            specification: document.getElementById('editSpecification').value,
+            size: document.getElementById('editSize').value,
             address: document.getElementById('editAddress').value,
-            monthlyRent: parseFloat(document.getElementById('editRent').value)
+            desc: document.getElementById('editDesc').value,
+            bescom_no: document.getElementById('editBescomNo').value,
+            property_no: document.getElementById('editPropertyNo').value,
+            bwwssb_no: document.getElementById('editBwwssbNo').value,
+            aquired_mode: document.getElementById('editAquiredMode').value,
+            aq_date: document.getElementById('editAqDate').value,
+            last_upd_dt: new Date().toISOString().split('T')[0]
         };
         await updateProperty(id, updatedData);
         new bootstrap.Modal(document.getElementById('editPropertyModal')).hide();

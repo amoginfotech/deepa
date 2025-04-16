@@ -34,7 +34,19 @@
                     </div>
                 </div>
                 <table class="table table-striped">
-                   
+                    <thead>
+                        <tr>
+                            <th>Property Name</th>
+                            <th>Tenant Name</th>
+                            <th>Ledger Description</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Payment Date</th>
+                            <th>Balance</th>
+                            <th>Last Update Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
                     <tbody id="rentsList">
                     </tbody>
                 </table>
@@ -50,33 +62,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editRentForm" onsubmit="event.preventDefault(); updateRent(this.dataset.rentId, {
-                        propertyName: this.editPropertyName.value,
-                        tenantName: this.editTenantName.value,
-                        rentMonth: this.editRentMonth.value,
-                        utilityBills: this.editUtilityBills.value,
-                        rentAmount: this.editRentAmount.value
-                    });">
+                    <form id="editRentForm">
                         <div class="mb-3">
                             <label for="editPropertyName" class="form-label">Property Name</label>
-                            <input type="text" class="form-control" id="editPropertyName" required>
+                            <select class="form-select" id="editPropertyName" required></select>
                         </div>
                         <div class="mb-3">
                             <label for="editTenantName" class="form-label">Tenant Name</label>
-                            <input type="text" class="form-control" id="editTenantName" required>
+                            <select class="form-select" id="editTenantName" required></select>
                         </div>
                         <div class="mb-3">
-                            <label for="editRentMonth" class="form-label">Rent Month</label>
-                            <input type="month" class="form-control" id="editRentMonth" required>
+                            <label for="editLedgerDesc" class="form-label">Ledger Description</label>
+                            <input type="text" class="form-control" id="editLedgerDesc" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editUtilityBills" class="form-label">Utility Bills</label>
-                            <input type="number" class="form-control" id="editUtilityBills" step="0.01" required>
+                            <label for="editDebit" class="form-label">Debit</label>
+                            <input type="number" class="form-control" id="editDebit" step="0.01" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editRentAmount" class="form-label">Rent Amount</label>
-                            <input type="number" class="form-control" id="editRentAmount" step="0.01" required>
+                            <label for="editCredit" class="form-label">Credit</label>
+                            <input type="number" class="form-control" id="editCredit" step="0.01" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="editPymtDate" class="form-label">Payment Date</label>
+                            <input type="date" class="form-control" id="editPymtDate" required>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </form>
                 </div>
@@ -95,24 +106,29 @@
                     <form id="addRentForm">
                         <div class="mb-3">
                             <label for="propertyName" class="form-label">Property Name</label>
-                            <input type="text" class="form-control" id="propertyName" required>
+                            <select class="form-select" id="propertyName" required></select>
                         </div>
                         <div class="mb-3">
                             <label for="tenantName" class="form-label">Tenant Name</label>
-                            <input type="text" class="form-control" id="tenantName" required>
+                            <select class="form-select" id="tenantName" required></select>
                         </div>
                         <div class="mb-3">
-                            <label for="rentMonth" class="form-label">Rent Month</label>
-                            <input type="month" class="form-control" id="rentMonth" required>
+                            <label for="ledgerDesc" class="form-label">Ledger Description</label>
+                            <input type="text" class="form-control" id="ledgerDesc" required>
                         </div>
                         <div class="mb-3">
-                            <label for="utilityBills" class="form-label">Utility Bills</label>
-                            <input type="number" class="form-control" id="utilityBills" step="0.01" required>
+                            <label for="debit" class="form-label">Debit</label>
+                            <input type="number" class="form-control" id="debit" step="0.01" required>
                         </div>
                         <div class="mb-3">
-                            <label for="rentAmount" class="form-label">Rent Amount</label>
-                            <input type="number" class="form-control" id="rentAmount" step="0.01" required>
+                            <label for="credit" class="form-label">Credit</label>
+                            <input type="number" class="form-control" id="credit" step="0.01" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="pymtDate" class="form-label">Payment Date</label>
+                            <input type="date" class="form-control" id="pymtDate" required>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Add Rent</button>
                     </form>
                 </div>
