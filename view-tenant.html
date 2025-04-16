@@ -7,10 +7,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js" defer></script>
+    <script src="firebase-config.js"></script>
+    <script src="login.js"></script>
     <script src="tenant.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // Check authentication state on page load
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                // User is not signed in, redirect to login page
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 </head>
 <body>
     <div class="container-fluid px-4">
@@ -218,3 +229,27 @@
     </div>
 </body>
 </html>
+<script>
+    // Check authentication state on page load
+    firebase.auth().onAuthStateChanged((user) => {
+        if (!user) {
+            // User is not signed in, redirect to login page
+            window.location.href = 'index.html';
+        }
+    });
+    
+    // Handle logout functionality
+    function handleLogout() {
+        // Clear all cookies
+        document.cookie.split(';').forEach(c => {
+            document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+        });
+        
+        // Sign out from Firebase
+        firebase.auth().signOut().then(() => {
+            window.location.href = 'index.html';
+        }).catch((error) => {
+            console.error('Error signing out:', error);
+        });
+    }
+    </script>

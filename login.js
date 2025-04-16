@@ -1,6 +1,33 @@
 // Initialize Firebase Authentication
 const auth = firebase.auth();
 
+// Session timeout variables
+let timeoutTimer;
+const SESSION_TIMEOUT = 60000; // 60 seconds
+
+// Reset timer on user activity
+function resetTimer() {
+    clearTimeout(timeoutTimer);
+    timeoutTimer = setTimeout(logoutUser, SESSION_TIMEOUT);
+}
+
+// Logout function
+function logoutUser() {
+    auth.signOut().then(() => {
+        window.location.href = 'index.html';
+    }).catch((error) => {
+        alert(error.message);
+    });
+}
+
+// Setup activity listeners
+['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+    window.addEventListener(event, resetTimer);
+});
+
+// Initialize timer on page load
+resetTimer();
+
 // Login form submission handler
 document.getElementById('loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -23,7 +50,7 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
 auth.onAuthStateChanged((user) => {
     if (user) {
         // User is signed in, check if on home page
-        if (window.location.pathname.includes('home.html')) {
+        if (window.location.pathname.includes('home.html') || window.location.pathname.includes('view-property.html') || window.location.pathname.includes('view-rent.html') || window.location.pathname.includes('view-tenant.html')) {
             // Allow access to home page
         } else {
             // Redirect to home page
@@ -42,9 +69,5 @@ auth.onAuthStateChanged((user) => {
 
 // Logout button handler
 document.getElementById('logoutButton').addEventListener('click', () => {
-    auth.signOut().then(() => {
-        window.location.href = 'index.html';
-    }).catch((error) => {
-        alert(error.message);
-    });
+    logoutUser();
 });
